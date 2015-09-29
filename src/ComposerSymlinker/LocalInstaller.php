@@ -115,18 +115,26 @@ class LocalInstaller extends LibraryInstaller
      */
     protected function installCode(PackageInterface $package)
     {
-        $local_path = $this->getLocalPackagePath($package);
-        if (!is_null($local_path)) {
-            $this->io->write("  - Installing <info>" . $package->getName() . "</info> (<comment>as a symbolic link of " . $local_path . "</comment>)");
-            $this->initializeVendorSubdir($package);
-            if (true !== @symlink($local_path, $this->getInstallPath($package))) {
-                throw new FilesystemSymlinkerException(
-                    sprintf('Symlink fails: "%s" => "%s"', $local_path, $this->getInstallPath($package))
-                );
-            }
-            return true;
+        $localPath = $this->getLocalPackagePath($package);
+
+        if (is_null($localPath)) {
+            return parent::installCode($package);
         }
-        return parent::installCode($package);
+
+        $this->io->write(sprintf(
+            '  - Installing <info>%s</info> (<comment>as a symbolic link of %s</comment>)',
+            $package->getName(),
+            $localPath
+        ));
+
+        $this->initializeVendorSubdir($package);
+        if (true !== @symlink($localPath, $this->getInstallPath($package))) {
+            throw new FilesystemSymlinkerException(
+                sprintf('Symlinking failed: %s -> %s', $localPath, $this->getInstallPath($package))
+            );
+        }
+
+        return true;
     }
 
     /**
