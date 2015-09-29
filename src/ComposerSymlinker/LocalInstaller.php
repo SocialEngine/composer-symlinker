@@ -1,27 +1,20 @@
-<?php
-/**
- * This file is part of <https://github.com/piwi/composer-symlinker>
- */
-
-namespace ComposerSymlinker;
+<?php namespace ComposerSymlinker;
 
 use Composer\Composer;
+use Composer\Installer\LibraryInstaller;
 use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
-use Composer\Installer\LibraryInstaller;
 use Composer\Util\Filesystem;
 
 /**
  * Local package installer manager
- *
- * @author piwi <me@e-piwi.fr>
  */
 class LocalInstaller extends LibraryInstaller
 {
+    protected $localDirs = [];
+    protected $localVendors = [];
+    protected $localPackages = [];
 
-    protected $localDirs        = array();
-    protected $localVendors     = array();
-    protected $localPackages    = array();
 
     /**
      * {@inheritDoc}
@@ -44,14 +37,14 @@ class LocalInstaller extends LibraryInstaller
     /**
      * Define a list of local paths to scan (extra 'local-dirs')
      *
-     * @param   string|array    $dirs
+     * @param   string|array $dirs
      * @return  $this
      * @throws  \InvalidArgumentException if a path does not exist
      */
     public function setLocalDirs($dirs)
     {
         $dirs = is_array($dirs) ? $dirs : array($dirs);
-        foreach ($dirs as $i=>$dir) {
+        foreach ($dirs as $i => $dir) {
             if (!file_exists($dir)) {
                 throw new \InvalidArgumentException(
                     sprintf('Local path not found: %s', $dir)
@@ -60,18 +53,20 @@ class LocalInstaller extends LibraryInstaller
             $dirs[$i] = rtrim($dir, '/');
         }
         $this->localDirs = $dirs;
+
         return $this;
     }
 
     /**
      * Define a list of local vendors to restrict local directories scanning (extra 'local-vendors')
      *
-     * @param   string|array    $vendors
+     * @param   string|array $vendors
      * @return  $this
      */
     public function setLocalVendors($vendors)
     {
         $this->localVendors = is_array($vendors) ? $vendors : array($vendors);
+
         return $this;
     }
 
@@ -92,6 +87,7 @@ class LocalInstaller extends LibraryInstaller
             }
         }
         $this->localPackages = $paths;
+
         return $this;
     }
 
@@ -136,8 +132,10 @@ class LocalInstaller extends LibraryInstaller
                 $this->initializeVendorSubdir($target);
                 $this->filesystem->rename($this->getInstallPath($initial), $this->getInstallPath($target));
             }
+
             return true;
         }
+
         return parent::updateCode($initial, $target);
     }
 
@@ -148,15 +146,17 @@ class LocalInstaller extends LibraryInstaller
     {
         if ($this->isLocalSymlink($package)) {
             $this->filesystem->unlink($this->getInstallPath($package));
+
             return true;
         }
+
         return parent::removeCode($package);
     }
 
     /**
      * Test if a path is a symbolic link made by the plugin (or seems to be)
      *
-     * @param   string    $path
+     * @param   string $path
      * @return  bool
      */
     public function isLocalSymlink($path)
@@ -184,12 +184,12 @@ class LocalInstaller extends LibraryInstaller
     /**
      * Tests if a local path seems to be a valid Composer package
      *
-     * @param   string    $path
+     * @param   string $path
      * @return  bool
      */
     public function isValidLocalPackage($path)
     {
-        return (bool) (file_exists($path) && is_dir($path) && file_exists($path . DIRECTORY_SEPARATOR . 'composer.json'));
+        return (bool)(file_exists($path) && is_dir($path) && file_exists($path . DIRECTORY_SEPARATOR . 'composer.json'));
     }
 
     /**
@@ -236,6 +236,7 @@ class LocalInstaller extends LibraryInstaller
     protected function getPackageVendorName(PackageInterface $package)
     {
         list($vendor, $name) = explode('/', $package->getName());
+
         return $vendor;
     }
 

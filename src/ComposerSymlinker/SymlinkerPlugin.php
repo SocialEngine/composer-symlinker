@@ -1,17 +1,9 @@
-<?php
-/**
- * This file is part of <https://github.com/piwi/composer-symlinker>
- */
-
-namespace ComposerSymlinker;
+<?php namespace ComposerSymlinker;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 
-/**
- * @author piwi <me@e-piwi.fr>
- */
 class SymlinkerPlugin implements PluginInterface
 {
 
