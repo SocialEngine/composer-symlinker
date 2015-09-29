@@ -79,7 +79,10 @@ class LocalInstaller extends LibraryInstaller
      */
     public function setLocalPackages(array $paths)
     {
-        foreach ($paths as $name=>$path) {
+        foreach ($paths as $name => $path) {
+            $realPath = realpath($path);
+            $paths[$name] = $realPath;
+
             if (!$this->isValidLocalPackage($path)) {
                 throw new \InvalidArgumentException(
                     sprintf('Local path "%s" defined for package "%s" is not valid', $path, $name)
