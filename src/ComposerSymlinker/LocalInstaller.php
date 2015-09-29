@@ -83,10 +83,14 @@ class LocalInstaller extends LibraryInstaller
             $realPath = realpath($path);
             $paths[$name] = $realPath;
 
-            if (!$this->isValidLocalPackage($path)) {
-                throw new \InvalidArgumentException(
-                    sprintf('Local path "%s" defined for package "%s" is not valid', $path, $name)
-                );
+            if (!$this->isValidLocalPackage($realPath)) {
+                $this->io->write(sprintf(
+                    '<warning>Local path "%s" defined for package "%s" is not valid, using fallback.</warning>',
+                    $path,
+                    $name
+                ));
+
+                unset($paths[$name]);
             }
         }
         $this->localPackages = $paths;
