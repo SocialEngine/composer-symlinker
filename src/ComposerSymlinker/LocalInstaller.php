@@ -128,7 +128,9 @@ class LocalInstaller extends LibraryInstaller
         ));
 
         $this->initializeVendorSubdir($package);
-        if (true !== @symlink($localPath, $this->getInstallPath($package))) {
+        $installPath = $this->getInstallPath($package);
+        $shortestPath = $this->filesystem->findShortestPath($installPath, $localPath, false);
+        if (true !== @symlink($shortestPath, $this->getInstallPath($package))) {
             throw new FilesystemSymlinkerException(
                 sprintf('Symlinking failed: %s -> %s', $localPath, $this->getInstallPath($package))
             );
