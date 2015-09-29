@@ -1,6 +1,7 @@
 <?php namespace ComposerSymlinker;
 
 use Composer\Composer;
+use Composer\Installer\InstallerInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
@@ -15,6 +16,10 @@ class LocalInstaller extends LibraryInstaller
     protected $localVendors = [];
     protected $localPackages = [];
 
+    /**
+     * @var \Composer\Installer\InstallationManager
+     */
+    private $installManager;
 
     /**
      * {@inheritDoc}
@@ -22,6 +27,9 @@ class LocalInstaller extends LibraryInstaller
     public function __construct(IOInterface $io, Composer $composer, $type = 'library', Filesystem $filesystem = null)
     {
         parent::__construct($io, $composer, $type, $filesystem);
+
+        $this->installManager = clone $this->composer->getInstallationManager();
+
         $extra = $composer->getPackage()->getExtra();
         $this->setLocalDirs(
             isset($extra['local-dirs']) ? $extra['local-dirs'] : dirname(getcwd())
@@ -100,10 +108,34 @@ class LocalInstaller extends LibraryInstaller
 
     /**
      * {@inheritDoc}
+     *
+     * @param string $packageType
+     * @return bool
      */
     public function supports($packageType)
     {
-        return parent::supports($packageType);
+        try {
+            return $this->installManager->getInstaller($packageType) instanceof InstallerInterface;
+        } catch (\InvalidArgumentException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Return the install path based on package type.
+     *
+     * @param  PackageInterface $package
+     * @return string
+     */
+    public function getInstallPath(PackageInterface $package)
+    {
+        $path = $this->installManager->getInstallPath($package);
+
+        if (!$this->filesystem->isAbsolutePath($path)) {
+            return realpath('.') . DIRECTORY_SEPARATOR . rtrim($path, '/');
+        }
+
+        return $path;
     }
 
     /**
