@@ -19,7 +19,7 @@ Specifically:
 First, add the plugin as a dependency in your `composer.json`:
 
 ```json
-"socialengine/composer-symlinker": "dev-master"
+"socialengine/composer-symlinker": "1.0.0"
 ```
 
 Next, define local paths to your packages in an `extra` section of your `composer.json`. You have two options on how to
