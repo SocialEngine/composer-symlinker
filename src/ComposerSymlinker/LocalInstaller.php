@@ -210,6 +210,10 @@ class LocalInstaller extends LibraryInstaller
      */
     public function isLocalSymlink($path)
     {
+        if (!is_link($path)) {
+            return false;
+        }
+
         $link = readlink($path);
         if ($link === $path) {
             return false;
