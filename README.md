@@ -4,8 +4,9 @@ Composer Symlinker Plugin
 This [Composer](http://getcomposer.org/) plugin allows you to install packages as local symbolic links, with the option
 to fallback to other install options. This allows you to locally develop a package and its dependencies in parallel.
 
-This has been discussed as a possible improvement to Composer, but movement has been slow. See composer/composer#1229,
-and composer/composer#4011 for example discussions.
+This has been discussed as a possible improvement to Composer, but movement has been slow. See Composer issues 
+[#1299](https://github.com/composer/composer/issues/1229), and [#4011](https://github.com/composer/composer/issues/4011)
+for example discussions.
 
 This is a fork of [piwi/composer-symlinker](https://github.com/piwi/composer-symlinker) with some enhancements. 
 Specifically:
