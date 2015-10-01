@@ -2,6 +2,7 @@
     "name": "socialengine/composer-symlinker",
     "type": "composer-plugin",
     "description": "A composer plugin to install packages as local symbolic links",
+    "license": "MIT",
     "require": {
         "composer-plugin-api": "1.*"
     },

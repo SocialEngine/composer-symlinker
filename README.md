@@ -91,4 +91,4 @@ See *Windows* restrictions on the manual.
 
 ## License
 
-This is released under the "unlicense".
+This is released under the [MIT License](https://github.com/SocialEngine/composer-symlinker/blob/master/LICENSE).
