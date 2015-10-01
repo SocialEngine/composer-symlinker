@@ -7,16 +7,12 @@
         "composer-plugin-api": "1.*"
     },
     "require-dev": {
-        "composer/composer": "1.*"
+        "composer/composer": "1.*@dev"
     },
-    "minimum-stability": "dev",
     "autoload": {
         "psr-0": { "ComposerSymlinker": "src/" }
     },
     "extra": {
-        "class": "ComposerSymlinker\\SymlinkerPlugin",
-        "branch-alias": {
-            "dev-master": "1.0.*-dev"
-        }
+        "class": "ComposerSymlinker\\SymlinkerPlugin"
     }
 }
