@@ -15,6 +15,11 @@ class SymlinkerPlugin implements PluginInterface
      */
     public function activate(Composer $composer, IOInterface $io)
     {
+        if (!empty(getenv('DISABLE_SYMLINKER'))) {
+            $io->write('Found DISABLE_SYMLINKER envvar, disabling symlinker...');
+            return;
+        }
+
         $composer->getInstallationManager()->addInstaller(
             new LocalInstaller($io, $composer)
         );
