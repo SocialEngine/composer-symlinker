@@ -114,6 +114,10 @@ class LocalInstaller extends LibraryInstaller
      */
     public function supports($packageType)
     {
+        if ('metapackage' === $packageType) {
+            return false;
+        }
+
         try {
             return $this->installManager->getInstaller($packageType) instanceof InstallerInterface;
         } catch (\InvalidArgumentException $e) {
